@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { LocalbackendUrl, ProductionbackendUrl } from "../constant";
 import MessageBox from "./MessageBox";
 const Room = () => {
-  const socket = useMemo(() => io(ProductionbackendUrl), []);
+  const socket = useMemo(() => io("https://web-backend-5pp9.onrender.com"), []);
   const [socketId, setSocketId] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]); // Array to store all messages
@@ -23,7 +23,8 @@ const Room = () => {
     // console.log(roomName);
   };
 
-  const sendMessage = () => {
+  const sendMessage = (e) => {
+    e.preventDefault();
     const payload = {
       message,
       room: roomName,
@@ -31,6 +32,7 @@ const Room = () => {
     };
     console.log(payload)
     socket.emit("message",payload);
+    setMessage("")
   };
   useEffect(() => {
     socket.on("connect", () => {
@@ -92,13 +94,14 @@ const Room = () => {
               room : <span className="text-3xl font-bold">{roomName}</span>
             </h1>
             <div className="card-body flex flex-col items-center overflow-auto-y h-[75vh]">
-              <div className="w-full flex flex-col  lg:space-y-3 h-[90vh]  max-h-[90vh] overflow-y-auto">
+              <div className="w-full flex flex-col  lg:space-y-2 h-[90vh]   max-h-[90vh] overflow-y-auto">
                 {/* Chat messages container */}
                 {messages?.map((msg, idx) => (
                   <MessageBox key={idx} message={msg} you={you} />
                 ))}
               </div>
               {/* Input and Send Button */}
+                <form onSubmit={sendMessage}>
               <div className="flex justify-center gap-2 items-center w-full mt-4">
                 <label className="text-xl" htmlFor="message"></label>
                 <input
@@ -109,12 +112,13 @@ const Room = () => {
                   onChange={(e) => setMessage(e.target.value)}
                 />
                 <button
-                  onClick={sendMessage}
+                  
                   className="px-4 py-2 rounded-md hover:bg-blue-900 bg-blue-800"
                 >
                   Send
                 </button>
               </div>
+                </form>
             </div>
           </div>
         </div>
