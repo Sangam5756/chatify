@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
-import { LocalbackendUrl } from "../constant";
+import { LocalbackendUrl, ProductionbackendUrl } from "../constant";
 import MessageBox from "./MessageBox";
 const Room = () => {
-  const socket = useMemo(() => io(LocalbackendUrl), []);
+  const socket = useMemo(() => io(ProductionbackendUrl), []);
   const [socketId, setSocketId] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]); // Array to store all messages
