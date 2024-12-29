@@ -7,10 +7,8 @@ const Room = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]); // Array to store all messages
   const [you, setYou] = useState(); // Assuming 'you' is the current user
-
-
-  //   to check user is joined or not
-  const [inRoom, setInRoom] = useState(false);
+//   to check user is joined or not
+  const [inRoom, setInRoom] = useState(true);
   // name of the room
   const [roomName, setRoomName] = useState("");
 
@@ -35,6 +33,13 @@ const Room = () => {
     socket.emit("message", payload);
     setMessage("");
   };
+
+  const leaveRoom = ()=>{
+    socket.disconnect();
+    setInRoom
+    alert(`${you} leave the room`)
+  }
+
 
   useEffect(() => {
     socket.on("connect", () => {
