@@ -10,14 +10,14 @@ const PORT = process.env.PORT;
 const server = new createServer(app);
 app.use(
   cors({
-    origin: "https://chat-app12-nu.vercel.app",
+    origin: process.env.ProductionUrl,
     credentials: true,
   })
 );
 // socket  created /also cors because server and client on different origin
 const io = new Server(server, {
   cors: {
-    origin: process.env.LocalUrl,
+    origin: process.env.ProductionUrl,
     methods: ["GET", "POST"],
     credentials: true,
   },
