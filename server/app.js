@@ -23,6 +23,7 @@ const io = new Server(server, {
   },
 });
 
+
 // socket connection created
 io.on("connection", (socket) => {
   console.log("user connected" + socket.id);
@@ -30,14 +31,15 @@ io.on("connection", (socket) => {
 
   // just take name from frontend and create room
   socket.on("join-room", ({ roomName, userInput }) => {
-    console.log(roomName);
     // When Room Name is Not there
     if (roomName === "") {
       socket.emit("join-message", {
         message: "Enter Valid  room Name",
         inRoom: false,
       });
-    } else {
+
+    }
+     else {
       // // joined the room
       socket.join(roomName);
       // send the aknowledgement to user as connected
@@ -47,13 +49,16 @@ io.on("connection", (socket) => {
         name: roomName,
         username: userInput,
       });
-      console.log("room joined ");
+      
     }
   });
 
+  // received the 
   socket.on("message", ({ message, room, username }) => {
     io.to(room).emit("received-message", { message, room, username });
   });
+
+
 
 
   socket.on("disconnect", () => {
