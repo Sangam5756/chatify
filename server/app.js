@@ -10,14 +10,14 @@ const PORT = process.env.PORT;
 const server = new createServer(app);
 app.use(
   cors({
-    origin: "https://chat-app12-nu.vercel.app",
+    origin: process.env.LocalUrl,
     credentials: true,
   })
 );
 // socket  created /also cors because server and client on different origin
 const io = new Server(server, {
   cors: {
-    origin: "https://chat-app12-nu.vercel.app",
+    origin: process.env.LocalUrl,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -26,17 +26,35 @@ const io = new Server(server, {
 // socket connection created
 io.on("connection", (socket) => {
   console.log("user connected" + socket.id);
+
+
   // just take name from frontend and create room
-  socket.on("join-room", (room) => {
-    socket.join(room);
-    console.log("user joined room" + room);
+  socket.on("join-room", ({ roomName, userInput }) => {
+    console.log(roomName);
+    // When Room Name is Not there
+    if (roomName === "") {
+      socket.emit("join-message", {
+        message: "Enter Valid  room Name",
+        inRoom: false,
+      });
+    } else {
+      // // joined the room
+      socket.join(roomName);
+      // send the aknowledgement to user as connected
+      io.to(roomName).emit("join-message", {
+        message: `${userInput} joined the room`,
+        inRoom: true,
+        name: roomName,
+        username: userInput,
+      });
+      console.log("room joined ");
+    }
   });
-  // take room and message and send to all which are in room
-  socket.on("message", ({ message, room }) => {
-    console.log({ message, room });
-    // socket.broadcast.emit("received-messege",data)
-    io.to(room).emit("received-messege", message);
+
+  socket.on("message", ({ message, room, username }) => {
+    io.to(room).emit("received-message", { message, room, username });
   });
+
 
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
@@ -47,10 +65,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-// this will create only http instance we need to listent on server
-// app.listen(PORT, () => {
-//   console.log(`server is listening on ${PORT}`);
-// });
+
 
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
