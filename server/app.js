@@ -10,7 +10,7 @@ const PORT = process.env.PORT;
 const server = new createServer(app);
 app.use(
   cors({
-    origin: process.env.LocalUrl,
+    origin: "https://chat-app12-nu.vercel.app",
     credentials: true,
   })
 );
