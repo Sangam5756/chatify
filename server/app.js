@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.json({message:"Hello World",up:true});
 });
 
 
