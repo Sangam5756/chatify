@@ -64,9 +64,9 @@ const Room = () => {
 
 
   return (
-    <div data-theme="dark" className="duration-1000 w-full" >
+    <div data-theme="dark" className="duration-400" >
       {!inRoom && (
-        <div  className="flex h-[93vh] duration-1000 lg:h-[93vh]  justify-center">
+        <div  className="flex h-[93vh] lg:h-[93vh]  justify-center">
           <div className="card bg-base-300 my-10 h-fit w-96 shadow-xl">
             <h1 className="text-center text-3xl font-bold">CHAT APP</h1>
             <div className="card-body">

@@ -1,61 +1,71 @@
-import React from "react";
-import "./Message.css"
+import React, { useEffect, useRef } from "react";
+
 const MessageBox = ({ message, you }) => {
   const isUserMessage = message?.username === you;
-  console.log("it is current user : ", isUserMessage);
-  console.log(message);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text).then(() => {
       alert("Message copied to clipboard!"); // Optional: Add a notification.
     });
   };
+  const messagesEndRef = useRef(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [message]);
 
   return (
-    <div>
+    <div className="flex">
       {/* User's message */}
       {isUserMessage && (
-        <div className="message-container">
-          <strong className="message-username">{you}: &nbsp;</strong>
-          <div className="message-box user-message">
-            <pre className="message-text">
-              <code>{message.message}</code>
-            </pre>
-           
-          </div>
-           {/* Copy button */}
-           <button
-              className="copy-button"
+        <div className="flex justify-end items-start my-2 px-4 lg:px-10">
+          <strong className="text-sm sm:text-base text-gray-300">
+            {message.username}: &nbsp;
+          </strong>
+          <div className="flex items-start justify-between w-full">
+            {/* Message Box */}
+            <div className="bg-green-800 text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto">
+              <pre className="text-sm sm:text-base md:text-lg">
+                <code className="break-words">{message.message}</code>
+              </pre>
+            </div>
+
+            {/* Copy Button */}
+            <button
+              className="mt-2 text-xs text-green-900 bg-white px-2 py-1 rounded shadow hover:bg-gray-200"
               onClick={() => handleCopy(message.message)}
               title="Copy message"
             >
-              copy
+              Copy
             </button>
+          </div>
         </div>
       )}
 
       {/* Other user's message */}
       {!isUserMessage && (
-        <div className="message-container">
-          <strong className="message-username">
-            {message.username}: &nbsp;
-          </strong>
-          <div className="message-box other-message">
-            <pre className="message-text">
-              <code>{message.message}</code>
+        <div className="flex justify-start items-start my-2 px-4 lg:px-10">
+          <div className="bg-gray-700 text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl overflow-x-auto">
+            <strong className="text-sm sm:text-base text-gray-300">
+              {message.username}: &nbsp;
+            </strong>
+            <pre className="text-sm sm:text-base md:text-lg">
+              <code className="break-words">{message.message}</code>
             </pre>
-            {/* Copy button */}
             <button
-              className="copy-button"
+              className="mt-2 text-xs text-gray-200 bg-gray-600 px-2 py-1 rounded shadow hover:bg-gray-500"
               onClick={() => handleCopy(message.message)}
               title="Copy message"
             >
-              copy
+              Copy
             </button>
           </div>
         </div>
       )}
+       <div ref={messagesEndRef} />
     </div>
   );
 };
+
 export default MessageBox;
