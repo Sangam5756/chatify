@@ -23,11 +23,11 @@ const io = new Server(server, {
   },
 });
 
+let users = [];
 
 // socket connection created
 io.on("connection", (socket) => {
   console.log("user connected" + socket.id);
-
 
   // just take name from frontend and create room
   socket.on("join-room", ({ roomName, userInput }) => {
@@ -37,11 +37,10 @@ io.on("connection", (socket) => {
         message: "Enter Valid  room Name",
         inRoom: false,
       });
-
-    }
-     else {
+    } else {
+      // Add user to the users array only if not already present
+        socket.join(roomName);
       // // joined the room
-      socket.join(roomName);
       // send the aknowledgement to user as connected
       io.to(roomName).emit("join-message", {
         message: `${userInput} joined the room`,
@@ -49,28 +48,28 @@ io.on("connection", (socket) => {
         name: roomName,
         username: userInput,
       });
-      
     }
   });
 
-  // received the 
+  // received the
   socket.on("message", ({ message, room, username }) => {
     io.to(room).emit("received-message", { message, room, username });
   });
 
-
-
-
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
+    users.pop(socket._id)
+    
+     // Optionally, emit a message to the room that the user has disconnected
+     io.emit("user-disconnected", { socketId: socket.id });
+
+     // Update the room's user list
   });
 });
 
 app.get("/", (req, res) => {
-  res.json({message:"Hello World",up:true});
+  res.json({ message: "Hello World", up: true });
 });
-
-
 
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);

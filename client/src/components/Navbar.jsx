@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({users}) => {
+  
   return (
     <div data-theme="dark" className="navbar bg-base-100">
       <div className="flex-1">
@@ -9,6 +10,7 @@ const Navbar = () => {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
+          {/* {JSON.stringify(users)} */}
           <li>
             {/* <Link to={"/"}>Friend</Link> */}
           </li>

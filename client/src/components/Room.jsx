@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { LocalbackendUrl, ProductionbackendUrl } from "../constant";
 import MessageBox from "./MessageBox";
+import { toast } from "react-toastify";
+import Navbar from "./Navbar";
 const Room = () => {
   const socket = useMemo(() => io(ProductionbackendUrl), []);
   const [message, setMessage] = useState("");
@@ -11,7 +13,6 @@ const Room = () => {
   const [inRoom, setInRoom] = useState(false);
   // name of the room
   const [roomName, setRoomName] = useState("");
-
   // function to join the room
   const joinRoom = (e) => {
     e.preventDefault();
@@ -48,14 +49,19 @@ const Room = () => {
     // after joining receive the message
     socket.on("join-message", (data) => {
       setInRoom(data?.inRoom);
-      alert(data.message);
+      
+      toast.success(data.message)
       setRoomName(data?.name);
+      console.log(data)
+      setUsers(data?.users)
     });
 
     socket.on("received-message", (data) => {
       setMessages((prev) => [...prev, data]);
       console.log("message from the server :", data);
     });
+
+    
 
     return () => {
       socket.disconnect();
@@ -102,7 +108,7 @@ const Room = () => {
             <h1 className="text-center text-xl font-bold">
               room : <span className="text-3xl font-bold">{roomName}</span>
             </h1>
-            <div className="card-body flex flex-col items-center overflow-auto-y h-[75vh]">
+            <div className="card-body flex flex-col w-full items-center overflow-auto-y h-[75vh]">
               <div className="w-full flex flex-col  lg:space-y-2 h-[90vh]   max-h-[90vh] overflow-y-auto">
                 {/* Chat messages container */}
                 {messages?.map((msg, idx) => (
@@ -116,7 +122,7 @@ const Room = () => {
                  <textarea
                     type="text"
                     placeholder="Type here"
-                    className="input outline-none px-2 py-4 mt-2 mb-2 input-bordered input-primary w-full max-w-xs"
+                    className=" textarea textarea-success outline-none border-none"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                   />
