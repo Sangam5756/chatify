@@ -45,23 +45,28 @@ const MessageBox = ({ message, you }) => {
 
       {/* Other user's message */}
       {!isUserMessage && (
-        <div className="flex justify-start items-start my-2 px-4 lg:px-10">
-          <div className="bg-gray-700 text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl overflow-x-auto">
-            <strong className="text-sm sm:text-base text-gray-300">
-              {message.username}: &nbsp;
-            </strong>
+        <div className="flex justify-end items-start my-2 px-4 lg:px-10">
+        <strong className="text-sm sm:text-base text-gray-300">
+          {message.username}: &nbsp;
+        </strong>
+        <div className="flex items-start justify-between w-full">
+          {/* Message Box */}
+          <div className="bg-gray-800 text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto">
             <pre className="text-sm sm:text-base md:text-lg">
               <code className="break-words">{message.message}</code>
             </pre>
-            <button
-              className="mt-2 text-xs text-gray-200 bg-gray-600 px-2 py-1 rounded shadow hover:bg-gray-500"
-              onClick={() => handleCopy(message.message)}
-              title="Copy message"
-            >
-              Copy
-            </button>
           </div>
+
+          {/* Copy Button */}
+          <button
+            className="mt-2 text-xs text-green-900 bg-white px-2 py-1 rounded shadow hover:bg-gray-200"
+            onClick={() => handleCopy(message.message)}
+            title="Copy message"
+          >
+            Copy
+          </button>
         </div>
+      </div>
       )}
        <div ref={messagesEndRef} />
     </div>
