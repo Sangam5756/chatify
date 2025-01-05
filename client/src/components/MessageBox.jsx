@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { toast } from "react-toastify";
 
-const MessageBox = ({ message, you }) => {
+const MessageBox = ({ message, you,theme }) => {
   const isUserMessage = message?.username === you;
 
   function getFirstLetter(name) {
@@ -22,15 +22,8 @@ const MessageBox = ({ message, you }) => {
     }
   }, [message]);
 
-  //   <button
-  //   className="mt-2 mb-2 mx-auto text-xs text-green-900 bg-white px-2 flex py-1 rounded shadow hover:bg-gray-200"
-  //   onClick={() => handleCopy(message.message)}
-  //   title="Copy message"
-  // >
-  //   Copy
-  // </button>
   return (
-    <div className="flex">
+    <div className={`flex ${theme ?"text-white" :"text-black"}`}>
       {/* User's message */}
       {isUserMessage && (
         <div>
@@ -43,13 +36,13 @@ const MessageBox = ({ message, you }) => {
                 </div>
               </div>
               {/* username */}
-              <div className=" rounded ml-2 text-green-500  text-sm">
+              <div className={`rounded ml-2  text-sm ${theme ? "text-green-500 " :"text-black"}`}>
                 {message.username}
               </div>
             </div>
 
             <div className="flex flex-col">
-              <div className=" text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto">
+              <div className={` ${theme ? "text-white " :"text-black  shadow-md"} rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto`}>
                 {/* {message.message} */}
                 <pre className="text-sm sm:text-base md:text-lg">
                   <code className="break-words">{message.message}</code>
@@ -75,12 +68,12 @@ const MessageBox = ({ message, you }) => {
                 </div>
               </div>
               {/* username */}
-              <div className=" rounded ml-2 text-green-500  text-sm">
+              <div className={`rounded ml-2  text-sm ${theme ? "text-green-500 " :"text-black"}`}>
                 {message.username}
               </div>
               <div>
                 <p
-                  className="cursor-pointer ml-10"
+                  className="cursor-pointer ml-10 text-slate-500"
                   onClick={() => handleCopy(message.message)}
                   title="Copy message"
                 >
@@ -90,7 +83,7 @@ const MessageBox = ({ message, you }) => {
             </div>
           {/* Message section */}
             <div className="flex flex-col w-full ">
-              <div className=" text-white rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto">
+            <div className={` ${theme ? "text-white " :"text-black  shadow-md"} rounded-lg p-3 shadow-md max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl overflow-x-auto`}>
                  
                 {/* {message.message} */}
                 <pre className="text-sm sm:text-base md:text-lg">

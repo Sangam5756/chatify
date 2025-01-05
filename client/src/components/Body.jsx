@@ -30,7 +30,7 @@ const Body = () => {
   return (
     <div>
       <div >
-        <Navbar/>
+        {/* <Navbar/> */}
         {loading ? <Loading /> : <Outlet />}
       </div>
     </div>
