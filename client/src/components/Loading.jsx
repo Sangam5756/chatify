@@ -16,8 +16,8 @@ const Loading = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full flex duration-300 flex-col items-center justify-center" data-theme="dark">
-      <div className="text-center">
+    <div className="h-screen w-full flex duration-1000 flex-col items-center justify-center" data-theme="dark">
+      <div className="duration-1000 text-center">
         <span className="countdown font-mono text-4xl">
           <span
             style={{ "--value": counter }} // DaisyUI countdown requires this style for the value

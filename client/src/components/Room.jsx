@@ -64,9 +64,9 @@ const Room = () => {
 
 
   return (
-    <div data-theme="dark" className="duration-400" >
+    <div data-theme="dark" className="duration-1000 w-full" >
       {!inRoom && (
-        <div  className="flex h-[93vh] lg:h-[93vh]  justify-center">
+        <div  className="flex h-[93vh] duration-1000 lg:h-[93vh]  justify-center">
           <div className="card bg-base-300 my-10 h-fit w-96 shadow-xl">
             <h1 className="text-center text-3xl font-bold">CHAT APP</h1>
             <div className="card-body">
@@ -113,10 +113,10 @@ const Room = () => {
               <form onSubmit={sendMessage}>
                 <div className="flex justify-center gap-2 items-center w-full mt-4">
                   <label className="text-xl" htmlFor="message"></label>
-                  <input
+                 <textarea
                     type="text"
                     placeholder="Type here"
-                    className="input outline-none px-2 py-1 mt-2 mb-2 input-bordered input-primary w-full max-w-xs"
+                    className="input outline-none px-2 py-4 mt-2 mb-2 input-bordered input-primary w-full max-w-xs"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                   />

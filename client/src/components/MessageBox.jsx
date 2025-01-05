@@ -1,39 +1,61 @@
 import React from "react";
-
+import "./Message.css"
 const MessageBox = ({ message, you }) => {
-    
+  const isUserMessage = message?.username === you;
+  console.log("it is current user : ", isUserMessage);
+  console.log(message);
 
-    const isUserMessage = message?.username === you;
-    console.log("it is current user : ",isUserMessage)
-    console.log(message)
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Message copied to clipboard!"); // Optional: Add a notification.
+    });
+  };
 
-    return (
-      <div>
-          {/* User's message */}
+  return (
+    <div>
+      {/* User's message */}
       {isUserMessage && (
-        <div className="flex justify-start items-center my-4 lg:px-10">
-              <strong className="text-sm text-gray-200">{you }: &nbsp; </strong>
-          <div className="bg-green-500 text-white  rounded-lg  p-3 max-w-xs shadow-lg ">
-            <div className="">
-              <p className="text-lg">{message.message}</p>
-            </div>
+        <div className="message-container">
+          <strong className="message-username">{you}: &nbsp;</strong>
+          <div className="message-box user-message">
+            <pre className="message-text">
+              <code>{message.message}</code>
+            </pre>
+           
           </div>
+           {/* Copy button */}
+           <button
+              className="copy-button"
+              onClick={() => handleCopy(message.message)}
+              title="Copy message"
+            >
+              copy
+            </button>
         </div>
       )}
 
       {/* Other user's message */}
       {!isUserMessage && (
-        <div className="flex justify-start items-center lg:px-10 my-4">
-              <strong className="text-sm text-gray-300">{message.username}: &nbsp;</strong>
-          <div className="bg-gray-700 text-white rounded-lg p-3 max-w-xs shadow-lg flex items-center">
-            <div className="flex flex-col">
-              <p className="text-lg">{message.message}</p>
-            </div>
+        <div className="message-container">
+          <strong className="message-username">
+            {message.username}: &nbsp;
+          </strong>
+          <div className="message-box other-message">
+            <pre className="message-text">
+              <code>{message.message}</code>
+            </pre>
+            {/* Copy button */}
+            <button
+              className="copy-button"
+              onClick={() => handleCopy(message.message)}
+              title="Copy message"
+            >
+              copy
+            </button>
           </div>
         </div>
       )}
-        
-      </div>
-    );
-  };
+    </div>
+  );
+};
 export default MessageBox;
