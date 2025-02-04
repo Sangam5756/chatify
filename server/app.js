@@ -1,9 +1,9 @@
 import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import  https from "https";
 import cors from "cors";
 import dotenv from "dotenv";
+import { fetchData } from "./workers/api";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
@@ -67,31 +67,19 @@ io.on("connection", (socket) => {
      // Update the room's user list
   });
 });
-
+                  
 app.get("/", (req, res) => {
   res.json({ message: "Hello World", up: true });
 });
 
-const url = "https://ai-coder-cogm.onrender.com/get-tasks";
-
-// Function to make a GET request and log the URL
-const fetchData = () => {
-  https.get(url, (response) => {
-    console.log(`Called URL: ${url}`); // Log the called URL
-    response.on("data", (chunk) => {
-      // Optionally, you can log the data if needed
-      // console.log(chunk.toString());
-    });
-  }).on("error", (error) => {
-    console.error("Error fetching data:", error);
-  });
-};
-
-// Call the URL immediately
-fetchData();
-
-// Call the URL every 8 minutes (480,000 milliseconds)
-setInterval(fetchData, 480000); // 8 minutes = 480,000 milliseconds
+  
+const url1 = "https://ai-coder-cogm.onrender.com/get-tasks";
+const url2 = "https://devmeetbackend57.onrender.com/profile/view";
+// Fetch data every 8 minutes
+setInterval(() => {
+  fetchData(url1);
+  fetchData(url2);
+}, 480000); 
 
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
