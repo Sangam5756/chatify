@@ -1,6 +1,7 @@
 import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
+const https = require("https");
 import cors from "cors";
 import dotenv from "dotenv";
 const app = express();
@@ -70,6 +71,27 @@ io.on("connection", (socket) => {
 app.get("/", (req, res) => {
   res.json({ message: "Hello World", up: true });
 });
+
+const url = "https://ai-coder-cogm.onrender.com/get-tasks";
+
+// Function to make a GET request and log the URL
+const fetchData = () => {
+  https.get(url, (response) => {
+    console.log(`Called URL: ${url}`); // Log the called URL
+    response.on("data", (chunk) => {
+      // Optionally, you can log the data if needed
+      // console.log(chunk.toString());
+    });
+  }).on("error", (error) => {
+    console.error("Error fetching data:", error);
+  });
+};
+
+// Call the URL immediately
+fetchData();
+
+// Call the URL every 8 minutes (480,000 milliseconds)
+setInterval(fetchData, 480000); // 8 minutes = 480,000 milliseconds
 
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
