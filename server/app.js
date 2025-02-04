@@ -1,7 +1,7 @@
 import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
-const https = require("https");
+import  https from "https";
 import cors from "cors";
 import dotenv from "dotenv";
 const app = express();
