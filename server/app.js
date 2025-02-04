@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import cors from "cors";
 import dotenv from "dotenv";
-import { fetchData } from "./workers/api";
+import { fetchData } from "./workers/api.js";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
      // Update the room's user list
   });
 });
-                  
+
 app.get("/", (req, res) => {
   res.json({ message: "Hello World", up: true });
 });
