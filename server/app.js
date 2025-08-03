@@ -3,10 +3,9 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import cors from "cors";
 import dotenv from "dotenv";
-import { fetchData } from "./workers/api.js";
 const app = express();
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 // server creation
 const server = new createServer(app);
 app.use(
@@ -40,7 +39,7 @@ io.on("connection", (socket) => {
       });
     } else {
       // Add user to the users array only if not already present
-        socket.join(roomName);
+      socket.join(roomName);
       // // joined the room
       // send the aknowledgement to user as connected
       io.to(roomName).emit("join-message", {
@@ -59,27 +58,19 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
-    users.pop(socket._id)
-    
-     // Optionally, emit a message to the room that the user has disconnected
-     io.emit("user-disconnected", { socketId: socket.id });
+    users.pop(socket._id);
 
-     // Update the room's user list
+    // Optionally, emit a message to the room that the user has disconnected
+    io.emit("user-disconnected", { socketId: socket.id });
+
+    // Update the room's user list
   });
 });
+
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello World", up: true });
 });
-
-  
-const url1 = "https://ai-coder-cogm.onrender.com/get-tasks";
-const url2 = "https://devmeetbackend57.onrender.com/profile/view";
-// Fetch data every 8 minutes
-setInterval(() => {
-  fetchData(url1);
-  fetchData(url2);
-}, 480000); 
 
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
