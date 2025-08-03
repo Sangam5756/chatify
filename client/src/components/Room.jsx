@@ -37,15 +37,22 @@ const Room = () => {
 
   const leaveRoom = () => {
     socket.disconnect();
-    setInRoom;
-    alert(`${you} leave the room`);
+    setInRoom(false);
+    window.location.reload();
+    alert(`${you} left the room`);
   };
 
   const toggle = () => {
-    setDarkTheme(!darkTheme);
-    localStorage.setItem("theme", darkTheme);
+    const newTheme = !darkTheme;
+    setDarkTheme(newTheme);
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
   };
-
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkTheme(true);
+    }
+  }, []);
   useEffect(() => {
     socket.on("connect", () => {
       // setSocketId(socket.id);
@@ -116,9 +123,18 @@ const Room = () => {
           className="flex duration-500 h-[93vh] lg:h-[93vh] justify-center"
         >
           <div className="card bg-base-300  h-full w-full shadow-xl">
-            <h1 className="text-center text-xl font-bold">
-              room : <span className="text-3xl font-bold">{roomName}</span>
-            </h1>
+            <div className="flex gap-5 justify-center">
+              {" "}
+              <h1 className="text-center text-xl font-bold">
+                room : <span className="text-3xl font-bold">{roomName}</span>
+              </h1>
+              <button
+                className="mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md transition"
+                onClick={leaveRoom}
+              >
+                Leave Room
+              </button>
+            </div>
             <div className="card-body flex flex-col w-full items-center overflow-auto-y h-[75vh]">
               <div className="w-full  flex flex-col  lg:space-y-2 h-[90vh]   max-h-[90vh] overflow-y-auto">
                 {/* Chat messages container */}
@@ -132,21 +148,27 @@ const Room = () => {
                 ))}
               </div>
               {/* Input and Send Button */}
-              <form onSubmit={sendMessage}>
-                <div className="flex justify-center gap-2 items-center w-full mt-4">
-                  <label className="text-xl" htmlFor="message"></label>
+              <form onSubmit={sendMessage} className="w-full px-4 mt-4">
+                <div className="flex items-center gap-2">
                   <textarea
-                    type="text"
-                    placeholder="Type here"
-                    className=" textarea textarea-success outline-none border-none"
+                    className="w-full resize-none rounded-md p-3 text-base border border-primary focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition-all duration-300"
+                    placeholder="Type your message..."
+                    rows={1}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault(); // Prevent newline
+                        sendMessage(e); // Send message
+                      }
+                    }}
                   />
                   <button
-                    className={`px-4 py-2 rounded-md ${
+                    type="submit"
+                    className={`px-5 py-2 font-medium rounded-md transition duration-300 ${
                       darkTheme
-                        ? "hover:bg-blue-900 text-white bg-blue-800"
-                        : "hover:bg-blue-900 text-white bg-blue-800"
+                        ? "bg-blue-700 text-white hover:bg-blue-800"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
                     }`}
                   >
                     Send
